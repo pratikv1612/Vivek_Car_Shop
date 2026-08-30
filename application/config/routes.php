@@ -10,16 +10,43 @@ $route['admin'] = 'admin/auth/login';
 $route['admin/login'] = 'admin/auth/login';
 $route['admin/logout'] = 'admin/auth/logout';
 $route['admin/dashboard'] = 'admin/dashboard/index';
+$route['admin/banners/create'] = 'admin/banners/create';
+$route['admin/banners/store'] = 'admin/banners/store';
+$route['admin/banners/edit/(:num)'] = 'admin/banners/edit/$1';
+$route['admin/banners/update/(:num)'] = 'admin/banners/update/$1';
+$route['admin/banners/delete/(:num)'] = 'admin/banners/delete/$1';
+$route['admin/banners'] = 'admin/banners/index';
+$route['admin/products/create'] = 'admin/products/create';
+$route['admin/products/store'] = 'admin/products/store';
+$route['admin/products/edit/(:num)'] = 'admin/products/edit/$1';
+$route['admin/products/update/(:num)'] = 'admin/products/update/$1';
+$route['admin/products/delete/(:num)'] = 'admin/products/delete/$1';
+$route['admin/products/delete-image/(:num)'] = 'admin/products/delete_image/$1';
+$route['admin/products/index/(:num)'] = 'admin/products/index/$1';
+$route['admin/products'] = 'admin/products/index';
 
 // User auth
 $route['login'] = 'auth/login';
 $route['register'] = 'auth/register';
 $route['logout'] = 'auth/logout';
 $route['account'] = 'auth/account';
+$route['about'] = 'pages/about';
+$route['contact'] = 'pages/contact';
+$route['contact/send'] = 'pages/send_contact';
+$route['cart'] = 'shop/cart';
+$route['wishlist'] = 'shop/wishlist';
+$route['compare'] = 'shop/compare';
+$route['checkout'] = 'shop/checkout';
+$route['shop/add/(:any)'] = 'shop/add/$1';
+$route['shop/remove/(:any)'] = 'shop/remove/$1';
+$route['shop/quantity'] = 'shop/quantity';
+$route['shop/summary'] = 'shop/summary';
 
 // Accessories
 $route['accessories'] = 'accessories/index';
 $route['accessories/(:num)'] = 'accessories/index/$1';
+$route['new-arrivals'] = 'accessories/new_arrivals';
+$route['new-arrivals/(:num)'] = 'accessories/new_arrivals/$1';
 $route['accessory/(:num)/(:any)'] = 'accessories/detail/$1/$2';
 
 // Cars

@@ -3,7 +3,7 @@
 <?php if (empty($banners)): ?>
 <p class="text-muted">No banners. Add one to show on homepage.</p>
 <?php else: ?>
-<table class="table table-bordered">
+<div class="table-responsive"><table class="table table-bordered">
     <thead><tr><th>Image</th><th>Title</th><th>Link</th><th>Order</th><th>Actions</th></tr></thead>
     <tbody>
         <?php foreach ($banners as $b): ?>
@@ -16,5 +16,5 @@
         </tr>
         <?php endforeach; ?>
     </tbody>
-</table>
+</table></div>
 <?php endif; ?>

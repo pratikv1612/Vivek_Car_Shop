@@ -11,6 +11,7 @@ class Auth extends MY_Controller {
         $this->load->model('User_model');
         $this->load->model('Saved_car_model');
         $this->load->model('Inquiry_model');
+        $this->load->model('Shopping_model');
         $this->load->library(['session', 'form_validation']);
         $this->load->helper(['url', 'form']);
     }
@@ -42,6 +43,8 @@ class Auth extends MY_Controller {
                     'user_name' => $user->name,
                     'user_email'=> $user->email,
                 ]);
+                $this->Shopping_model->merge_guest($user->id, $this->session->userdata('shop_lists') ?: []);
+                $this->session->unset_userdata('shop_lists');
 
                 redirect('account');
 
@@ -96,6 +99,8 @@ class Auth extends MY_Controller {
                 'user_name' => $user->name,
                 'user_email' => $user->email,
             ]);
+            $this->Shopping_model->merge_guest($user->id, $this->session->userdata('shop_lists') ?: []);
+            $this->session->unset_userdata('shop_lists');
 
             redirect('account');
         }
@@ -127,6 +132,7 @@ class Auth extends MY_Controller {
         $this->data['user'] = $user;
         $this->data['saved_cars'] = $this->Saved_car_model->get_by_user($user_id);
         $this->data['inquiries'] = $this->Inquiry_model->get_by_user($user_id);
+        $this->data['billing_history'] = [];
         $this->data['meta_title'] = 'My Account - ' . $this->data['site_name'];
 
         $this->load->view('layout/header', $this->data);

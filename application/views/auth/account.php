@@ -1,6 +1,9 @@
 <div class="container py-4">
-    <h1 class="h3 mb-4">My Account</h1>
-    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">My Account</h1>
+        <a href="<?= base_url('logout') ?>" class="btn btn-outline-danger btn-sm">Logout</a>
+    </div>
+
     <div class="row">
         <div class="col-lg-4 mb-4">
             <div class="card">
@@ -30,6 +33,39 @@
                     <?php endif; ?>
                 </div>
             </div>
+
+            <div class="card mb-4">
+                <div class="card-header"><strong>Past Billing / Order History</strong></div>
+                <div class="card-body">
+                    <?php if (empty($billing_history)): ?>
+                    <p class="text-muted mb-0">No past billing yet. Complete a checkout to see your order history here.</p>
+                    <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($billing_history as $order): ?>
+                                <tr>
+                                    <td><?= html_escape($order['id']) ?></td>
+                                    <td><?= html_escape($order['date']) ?></td>
+                                    <td>₹ <?= number_format($order['amount']) ?></td>
+                                    <td><?= html_escape($order['status']) ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header"><strong>Inquiry History</strong></div>
                 <div class="card-body">

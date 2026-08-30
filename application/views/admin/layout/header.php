@@ -36,6 +36,8 @@
             <div class="collapse navbar-collapse" id="adminNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/dashboard') ?>"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/banners') ?>"><i class="bi bi-images"></i> Banners</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/products') ?>"><i class="bi bi-box-seam"></i> Products</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/cars') ?>"><i class="bi bi-car-front"></i> Cars</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/accessories') ?>"><i class="bi bi-tools"></i> Accessories</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/inquiries') ?>"><i class="bi bi-chat-dots"></i> Inquiries</a></li>

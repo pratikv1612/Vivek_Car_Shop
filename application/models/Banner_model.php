@@ -10,8 +10,13 @@ class Banner_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_active() {
-        return $this->db->where('is_active', 1)
+    public function get_active($placement = null) {
+        $this->db->where('is_active', 1);
+        if ($placement !== null) {
+            $this->db->where('placement', $placement);
+        }
+
+        return $this->db
             ->order_by('display_order', 'ASC')
             ->get('banners')
             ->result();

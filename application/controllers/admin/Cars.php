@@ -35,9 +35,10 @@ class Cars extends CI_Controller {
         $this->data['total'] = $total;
         $this->data['page'] = $page;
         $this->data['total_pages'] = ceil($total / $per_page);
+        $this->data['entity'] = 'cars';
 
         $this->load->view('admin/layout/header', $this->data);
-        $this->load->view('admin/cars/list', $this->data);
+        $this->load->view('admin/list', $this->data);
         $this->load->view('admin/layout/footer');
     }
 

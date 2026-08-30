@@ -55,6 +55,10 @@ class Accessory_model extends CI_Model {
             $this->db->group_end();
         }
 
+        if (!empty($filters['is_new'])) {
+            $this->db->where('accessories.is_new', 1);
+        }
+
         $this->db->order_by('accessories.display_order', 'ASC');
         $this->db->order_by('accessories.created_at', 'DESC');
 
@@ -97,6 +101,10 @@ class Accessory_model extends CI_Model {
             $this->db->like('name', $filters['keyword']);
             $this->db->or_like('description', $filters['keyword']);
             $this->db->group_end();
+        }
+
+        if (!empty($filters['is_new'])) {
+            $this->db->where('is_new', 1);
         }
 
         return $this->db->count_all_results();
@@ -148,6 +156,25 @@ class Accessory_model extends CI_Model {
     public function get_featured($limit = 6)
     {
         return $this->get_list([], $limit, 0);
+    }
+
+    public function get_related($accessory_id, $category_id, $limit = 6)
+    {
+        $this->db->select('accessories.*, accessory_categories.name as category_name')
+            ->from('accessories')
+            ->join('accessory_categories', 'accessory_categories.id = accessories.category_id', 'left')
+            ->where('accessories.is_available', 1)
+            ->where('accessories.id !=', $accessory_id);
+
+        if ($category_id) {
+            $this->db->where('accessories.category_id', $category_id);
+        }
+
+        return $this->db->order_by('accessories.is_new', 'DESC')
+            ->order_by('accessories.display_order', 'ASC')
+            ->limit($limit)
+            ->get()
+            ->result();
     }
 
     /* =========================

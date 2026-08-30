@@ -27,9 +27,10 @@ class Inquiries extends CI_Controller {
         $this->data['page'] = $page;
         $this->data['total_pages'] = ceil($total / $per_page);
         $this->data['title'] = 'Inquiries';
+        $this->data['entity'] = 'inquiries';
         
         $this->load->view('admin/layout/header', $this->data);
-        $this->load->view('admin/inquiries/list', $this->data);
+        $this->load->view('admin/list', $this->data);
         $this->load->view('admin/layout/footer', $this->data);
     }
 }

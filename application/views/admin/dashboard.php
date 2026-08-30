@@ -40,7 +40,7 @@
         <?php if (empty($recent_inquiries)): ?>
         <p class="text-muted mb-0">No inquiries yet.</p>
         <?php else: ?>
-        <table class="table table-sm">
+        <div class="table-responsive"><table class="table table-sm">
             <thead><tr><th>Date</th><th>Type</th><th>Customer</th><th>Item</th></tr></thead>
             <tbody>
                 <?php foreach ($recent_inquiries as $i): ?>
@@ -52,7 +52,7 @@
                 </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+        </table></div>
         <a href="<?= base_url('admin/inquiries') ?>" class="btn btn-sm btn-outline-primary">View All</a>
         <?php endif; ?>
     </div>

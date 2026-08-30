@@ -34,9 +34,10 @@ class Accessories extends CI_Controller {
         $this->data['total_pages'] = ceil($total / $per_page);
         $this->data['title'] = 'Manage Accessories';
         $this->data['success_message'] = $this->session->flashdata('success');
+        $this->data['entity'] = 'accessories';
 
         $this->load->view('admin/layout/header', $this->data);
-        $this->load->view('admin/accessories/index', $this->data);
+        $this->load->view('admin/list', $this->data);
         $this->load->view('admin/layout/footer');
     }
 

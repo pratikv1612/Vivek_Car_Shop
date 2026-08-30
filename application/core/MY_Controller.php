@@ -13,7 +13,8 @@ class MY_Controller extends CI_Controller {
         $this->load->model('Setting_model');
         $this->load->model('Brand_model');
         $this->load->model('City_model');
-        
+        $this->load->model('Accessory_category_model');
+
         // Global data for views
         $this->data['site_name'] = $this->Setting_model->get('site_name') ?: 'V Auto Spare';
         $this->data['meta_keywords'] = $this->Setting_model->get('meta_keywords') ?: 'cars, buy car, sell car';
@@ -23,5 +24,6 @@ class MY_Controller extends CI_Controller {
             : '#';
         $this->data['brands'] = $this->Brand_model->get_all();
         $this->data['cities'] = $this->City_model->get_all();
+        $this->data['accessory_categories'] = $this->Accessory_category_model->get_all();
     }
 }

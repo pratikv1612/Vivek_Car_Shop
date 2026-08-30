@@ -1,4 +1,4 @@
-
+﻿
 CREATE DATABASE IF NOT EXISTS vivek_carshop CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE vivek_carshop;
 
@@ -159,6 +159,10 @@ CREATE TABLE IF NOT EXISTS accessories (
     description TEXT,
     compatible_models TEXT,
     is_available TINYINT(1) DEFAULT 1,
+    is_featured TINYINT(1) DEFAULT 0,
+    is_hot_sold TINYINT(1) DEFAULT 0,
+    is_new TINYINT(1) DEFAULT 1,
+    product_status VARCHAR(20) DEFAULT 'available',
     display_order INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -187,7 +191,7 @@ CREATE TABLE IF NOT EXISTS accessory_images (
 CREATE TABLE IF NOT EXISTS inquiries (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NULL,
-    type ENUM('car', 'accessory') NOT NULL,
+    type ENUM('car', 'accessory', 'contact') NOT NULL,
     car_id INT UNSIGNED NULL,
     accessory_id INT UNSIGNED NULL,
     customer_name VARCHAR(100) NOT NULL,
@@ -218,6 +222,19 @@ CREATE TABLE IF NOT EXISTS saved_cars (
     INDEX idx_user (user_id)
 ) ENGINE=InnoDB;
 
+-- User product lists (cart / wishlist / compare persistence)
+CREATE TABLE IF NOT EXISTS user_product_lists (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    accessory_id INT UNSIGNED NOT NULL,
+    list_type ENUM('cart','wishlist','compare') NOT NULL,
+    quantity INT UNSIGNED NOT NULL DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY user_product_type (user_id, accessory_id, list_type),
+    INDEX list_type_index (user_id, list_type)
+) ENGINE=InnoDB;
+
 -- Settings table (WhatsApp, logo, SEO, banners)
 CREATE TABLE IF NOT EXISTS settings (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -234,11 +251,13 @@ CREATE TABLE IF NOT EXISTS banners (
     title VARCHAR(200),
     image_path VARCHAR(255) NOT NULL,
     link_url VARCHAR(500),
+    placement VARCHAR(100) NOT NULL DEFAULT 'home_main',
     display_order INT DEFAULT 0,
     is_active TINYINT(1) DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_order (display_order)
+    INDEX idx_order (display_order),
+    INDEX idx_placement (placement)
 ) ENGINE=InnoDB;
 
 -- Insert default fuel types
@@ -343,3 +362,42 @@ INSERT INTO accessories (name, slug, category_id, price, description, compatible
 ('Premium Leather Seat Covers', 'premium-leather-seat-covers', 1, 15000, 'Handcrafted leather seat covers.', 'Swift, Baleno, i20', 1),
 ('Touchscreen Music System', 'touchscreen-music-system', 2, 25000, '7 inch Android Auto/Apple CarPlay.', 'Most cars 2015+', 1),
 ('Alloy Wheels Set 16 inch', 'alloy-wheels-16', 3, 35000, 'Set of 4 premium alloy wheels.', 'Nexon, Creta', 1);
+
+-- ============================================================
+-- Dummy product / accessories seed data (with images)
+-- Adds 10 sample products spread across all 8 categories.
+-- ============================================================
+
+INSERT INTO accessories (name, slug, category_id, brand_id, price, description, compatible_models, is_available, is_featured, is_hot_sold, is_new, product_status, display_order) VALUES
+('Art Leather Seat Covers (Beige)', 'art-leather-seat-covers-beige', 1, 1, 7499, 'Premium art leather seat covers with foam padding. Custom stitched fit, airbag compatible and easy to clean. Comes as a full set with headrest covers.', 'Swift, Baleno, i20, Creta', 1, 1, 1, 0, 'available', 1),
+('9 Inch Android Music System', 'android-music-system-9-inch', 2, 2, 12999, '9 inch HD touchscreen stereo with wireless Apple CarPlay & Android Auto, built-in GPS navigation, Bluetooth 5.0, steering wheel control support and reverse camera input.', 'Most cars 2015 and above', 1, 1, 0, 1, 'available', 2),
+('Diamond Cut Alloy Wheels 16 Inch (Set of 4)', 'diamond-cut-alloy-wheels-16', 3, 6, 28500, 'Set of 4 machine finished diamond cut alloy wheels. Lightweight aluminium construction, corrosion resistant coating and perfect OEM fitment.', 'Nexon, Creta, Seltos', 1, 1, 0, 0, 'available', 3),
+('Custom Fit Dashboard Cover (Charcoal)', 'custom-fit-dashboard-cover', 4, 3, 1499, 'Charcoal coloured custom fit dashboard cover. UV and heat resistant, anti-glare surface protects your dash from cracking and fading.', 'Nexon, Harrier, Thar', 1, 0, 0, 1, 'available', 4),
+('5D Waterproof Floor Mats (Set of 5)', '5d-waterproof-floor-mats', 5, 4, 2299, 'Set of 5 deep dish 5D floor mats. 100 percent waterproof with raised edges, anti-skid backing and easy to wipe clean surface.', 'Thar, Scorpio, XUV700', 1, 1, 1, 1, 'available', 5),
+('Microfiber Leather Steering Cover', 'microfiber-steering-cover', 6, 5, 649, 'Anti-slip microfiber leather steering cover. Breathable, sweat absorbing and fits all standard 38 cm steering wheels. Stitched by hand for a premium feel.', 'City, Amaze, i20', 1, 0, 1, 0, 'available', 6),
+('Ceramic Coating Wax Polish Kit', 'ceramic-coating-wax-kit', 7, 6, 1899, '9H ceramic coating wax kit with microfiber towels and foam applicator. Gives 6 months of mirror shine and hydrophobic paint protection.', 'All cars', 1, 0, 0, 1, 'available', 7),
+('LED Headlight Bulbs H4 6000K (Pair)', 'led-headlight-bulbs-h4', 8, 7, 2499, 'Pair of 6000K crystal white LED headlight bulbs. 12000 lumens brightness, IP68 waterproof, 50000 hour life and plug and play installation.', 'Seltos, Carens, i20', 1, 1, 1, 0, 'available', 8),
+('Portable Digital Tyre Inflator 150PSI', 'portable-tyre-inflator-150psi', 7, 4, 3299, 'Digital tyre inflator with backlit gauge, auto cut-off at preset pressure, emergency LED light and 3 metre power cord. Inflates a tyre in under 3 minutes.', 'All cars', 1, 0, 0, 1, 'available', 9),
+('Ambient RGB Interior LED Strip Kit', 'ambient-rgb-led-strip-kit', 8, 7, 1799, 'Bluetooth app controlled RGB ambient light strips with music sync mode. 16 million colours, multiple scene modes and flexible EL wire installation.', 'Seltos, Creta, Fortuner', 1, 0, 0, 1, 'available', 10);
+
+-- Primary image for each dummy product (matched by slug so ids line up on any install)
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'art-leather-seat-covers-beige';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'android-music-system-9-inch';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'diamond-cut-alloy-wheels-16';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'custom-fit-dashboard-cover';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = '5d-waterproof-floor-mats';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'microfiber-steering-cover';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'ceramic-coating-wax-kit';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'led-headlight-bulbs-h4';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'portable-tyre-inflator-150psi';
+INSERT INTO accessory_images (accessory_id, image_path, is_primary, display_order)
+SELECT id, 'assets/images/placeholder-product.svg', 1, 0 FROM accessories WHERE slug = 'ambient-rgb-led-strip-kit';

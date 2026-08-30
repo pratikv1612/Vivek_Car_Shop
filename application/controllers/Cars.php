@@ -54,7 +54,7 @@ class Cars extends MY_Controller {
         
         foreach ($this->data['cars'] as $c) {
             $p = $this->Car_image_model->get_primary($c->id);
-            $c->primary_image = $p ? base_url($p->image_path) : 'https://via.placeholder.com/400x200?text=No+Image';
+            $c->primary_image = $p ? base_url($p->image_path) : base_url('assets/images/placeholder-car.svg');
         }
         
         $this->load->view('layout/header', $this->data);
@@ -94,5 +94,24 @@ class Cars extends MY_Controller {
         $this->load->view('layout/header', $this->data);
         $this->load->view('cars/detail', $this->data);
         $this->load->view('layout/footer', $this->data);
+    }
+
+    public function toggle_save() {
+        header('Content-Type: application/json');
+        $car_id = (int) $this->input->post('car_id');
+        $user_id = $this->session->userdata('user_id');
+        if (!$user_id) {
+            echo json_encode(array('status' => FALSE, 'message' => 'Please login to save vehicles.'));
+            return;
+        }
+        $saved = $this->Saved_car_model->is_saved($user_id, $car_id);
+        if ($saved) {
+            $this->Saved_car_model->remove($user_id, $car_id);
+            $now_saved = FALSE;
+        } else {
+            $this->Saved_car_model->add($user_id, $car_id);
+            $now_saved = TRUE;
+        }
+        echo json_encode(array('status' => TRUE, 'saved' => $now_saved));
     }
 }

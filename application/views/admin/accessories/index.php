@@ -10,7 +10,7 @@
     </a>
 </div>
 
-<table class="table table-bordered">
+<div class="table-responsive"><table class="table table-bordered">
     <thead>
         <tr>
             <th>ID</th>
@@ -46,7 +46,7 @@
         <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
-</table>
+</table></div>
 
 <?php if ($total_pages > 1): ?>
 <nav>

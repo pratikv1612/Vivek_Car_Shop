@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f4f6f9"/>
+  <g transform="translate(200 128)">
+    <circle cx="0" cy="0" r="58" fill="#ffffff" stroke="#f4511e" stroke-width="3"/>
+    <circle cx="0" cy="0" r="22" fill="none" stroke="#f4511e" stroke-width="6"/>
+    <g stroke="#f4511e" stroke-width="8" stroke-linecap="round">
+      <line x1="0" y1="-58" x2="0" y2="-42"/>
+      <line x1="0" y1="42" x2="0" y2="58"/>
+      <line x1="-58" y1="0" x2="-42" y2="0"/>
+      <line x1="42" y1="0" x2="58" y2="0"/>
+      <line x1="-41" y1="-41" x2="-29" y2="-29"/>
+      <line x1="29" y1="29" x2="41" y2="41"/>
+      <line x1="29" y1="-29" x2="41" y2="-41"/>
+      <line x1="-29" y1="29" x2="-41" y2="41"/>
+    </g>
+  </g>
+  <text x="200" y="234" font-family="Verdana, Arial, sans-serif" font-size="22" font-weight="bold" fill="#222222" text-anchor="middle">VAutoSpare</text>
+  <text x="200" y="262" font-family="Verdana, Arial, sans-serif" font-size="14" fill="#8a8f98" text-anchor="middle">Auto Parts</text>
+</svg>

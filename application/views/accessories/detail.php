@@ -1,55 +1,23 @@
-<div class="container py-4">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
-            <li class="breadcrumb-item"><a href="<?= base_url('accessories') ?>">Accessories</a></li>
-            <li class="breadcrumb-item active"><?= html_escape($accessory->name) ?></li>
-        </ol>
-    </nav>
-    
-    <div class="row">
-        <div class="col-lg-8">
-            <?php if (!empty($images)): ?>
-            <div id="accGallery" class="carousel slide mb-4" data-bs-ride="carousel">
-                <div class="carousel-inner rounded-3 overflow-hidden">
-                    <?php foreach ($images as $i => $img): ?>
-                    <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
-                        <img src="<?= base_url($img->image_path) ?>" class="d-block w-100" style="height:400px;object-fit:cover" alt="">
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php if (count($images) > 1): ?>
-                <button class="carousel-control-prev" type="button" data-bs-target="#accGallery" data-bs-slide="prev"></button>
-                <button class="carousel-control-next" type="button" data-bs-target="#accGallery" data-bs-slide="next"></button>
-                <?php endif; ?>
-            </div>
-            <?php else: ?>
-            <img src="https://via.placeholder.com/800x400?text=No+Image" class="img-fluid rounded-3 mb-4" alt="">
-            <?php endif; ?>
-            
-            <h1 class="h3 fw-bold mb-3"><?= html_escape($accessory->name) ?></h1>
-            <?php if ($accessory->description): ?>
-            <div class="card mb-4">
-                <div class="card-header"><strong>Description</strong></div>
-                <div class="card-body"><?= nl2br(html_escape($accessory->description)) ?></div>
-            </div>
-            <?php endif; ?>
-            <?php if ($accessory->compatible_models): ?>
-            <div class="card">
-                <div class="card-header"><strong>Compatible Car Models</strong></div>
-                <div class="card-body"><?= nl2br(html_escape($accessory->compatible_models)) ?></div>
-            </div>
-            <?php endif; ?>
+<?php $main_image = !empty($images) ? base_url($images[0]->image_path) : ''; ?>
+<div class="va-product-detail">
+    <nav aria-label="breadcrumb" class="va-detail-breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li><li class="breadcrumb-item"><a href="<?= base_url('accessories') ?>">Shop</a></li><li class="breadcrumb-item active"><?= html_escape($accessory->name) ?></li></ol></nav>
+    <section class="va-detail-top">
+        <div class="va-detail-gallery">
+            <div class="va-detail-thumbs"><?php foreach ($images as $index => $image): ?><button type="button" class="<?= $index === 0 ? 'active' : '' ?>" data-image="<?= base_url($image->image_path) ?>"><img src="<?= base_url($image->image_path) ?>" alt=""></button><?php endforeach; ?></div>
+            <div class="va-detail-main-image" id="productMainImage"><?php if ($main_image): ?><img src="<?= $main_image ?>" alt="<?= html_escape($accessory->name) ?>"><?php else: ?><i class="bi bi-gear-wide-connected"></i><?php endif; ?></div>
         </div>
-        <div class="col-lg-4">
-            <div class="card shadow-sm sticky-top" style="top: 90px;">
-                <div class="card-body">
-                    <h2 class="h4 text-primary mb-4">₹ <?= number_format($accessory->price) ?></h2>
-                    <a href="<?= html_escape($whatsapp_url) ?>" target="_blank" class="btn btn-whatsapp btn-lg w-100">
-                        <i class="bi bi-whatsapp"></i> Inquiry via WhatsApp
-                    </a>
-                </div>
-            </div>
+        <div class="va-detail-summary">
+            <?php if (!empty($accessory->brand_name)): ?><span class="va-detail-brand">Brand: <?= html_escape($accessory->brand_name) ?></span><?php endif; ?>
+            <h1><?= html_escape($accessory->name) ?></h1>
+            <div class="va-detail-rating">★★★★★ <span>(5.0)</span></div>
+            <div class="va-detail-price">&#8377; <?= number_format($accessory->price) ?></div>
+            <div class="va-detail-stock"><i class="bi bi-check-circle-fill"></i> In stock</div>
+            <p class="va-detail-description"><?= $accessory->description ? nl2br(html_escape(character_limiter($accessory->description, 260))) : 'Genuine quality spare part, carefully selected for reliable performance.' ?></p>
+            <div class="va-quantity-row"><div class="va-quantity"><button type="button" class="qty-minus">−</button><input value="1" readonly><button type="button" class="qty-plus">+</button></div><button type="button" class="btn va-add-button shop-action" data-action="cart" data-product-id="<?= $accessory->id ?>"><i class="bi bi-whatsapp"></i> Enquire / Buy Now</button></div>
+            <ul class="va-purchase-notes"><li><i class="bi bi-eye"></i> Quality parts from trusted suppliers</li><li><i class="bi bi-truck"></i> Delivery available on eligible orders</li><li><i class="bi bi-shield-check"></i> Genuine product assistance</li></ul>
         </div>
-    </div>
+    </section>
+    <section class="va-detail-tabs"><div class="va-tab-labels"><span class="active">Description</span><span>Additional information</span><span>Shipping &amp; Return</span></div><div class="va-detail-content"><h2>About this item</h2><p><?= $accessory->description ? nl2br(html_escape($accessory->description)) : 'A dependable auto part designed to keep your vehicle performing at its best.' ?></p><?php if ($accessory->compatible_models): ?><h3>Compatible models</h3><p><?= nl2br(html_escape($accessory->compatible_models)) ?></p><?php endif; ?><table class="va-spec-table"><tr><th>Category</th><td><?= html_escape($accessory->category_name ?? 'Spare Part') ?></td></tr><tr><th>Brand</th><td><?= html_escape($accessory->brand_name ?? 'Universal') ?></td></tr><tr><th>Compatible model</th><td><?= html_escape($accessory->model_name ?? 'Multiple models') ?></td></tr><tr><th>Availability</th><td>In stock</td></tr></table></div></section>
+    <?php if (!empty($related_accessories)): ?><section class="va-related-products"><h2>Related Products</h2><div class="va-catalog-grid va-related-grid"><?php foreach ($related_accessories as $product): $url = base_url('accessory/'.$product->id.'/'.$product->slug); ?><article class="va-catalog-card"><a href="<?= $url ?>" class="va-catalog-image"><?php if ($product->primary_image): ?><img src="<?= $product->primary_image ?>" alt="<?= html_escape($product->name) ?>"><?php else: ?><i class="bi bi-gear-wide-connected"></i><?php endif; ?></a><div class="va-catalog-card-body"><h2><a href="<?= $url ?>"><?= html_escape($product->name) ?></a></h2><div class="va-catalog-rating">★★★★★</div><strong>&#8377; <?= number_format($product->price) ?></strong><a href="<?= $url ?>" class="btn va-card-button">View Product</a></div></article><?php endforeach; ?></div></section><?php endif; ?>
 </div>
+<script>$('.va-detail-thumbs button').on('click',function(){$('.va-detail-thumbs button').removeClass('active');$(this).addClass('active');$('#productMainImage').html('<img src="'+$(this).data('image')+'" alt="<?= html_escape($accessory->name) ?>">');});$('.qty-minus').on('click',function(){var input=$(this).siblings('input');input.val(Math.max(1,parseInt(input.val(),10)-1));});$('.qty-plus').on('click',function(){var input=$(this).siblings('input');input.val(parseInt(input.val(),10)+1);});</script>
